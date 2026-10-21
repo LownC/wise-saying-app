@@ -70,16 +70,10 @@ public class App {
     }
 
     private void deleteWiseSayingById(int deleteId) {
-        Optional<WiseSaying> found = wiseSayings.stream()
-                .filter(w -> w.getId() == deleteId)
-                .findFirst();
-        if(!found.isPresent())
-            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(deleteId));
-
-        else{
-            wiseSayings.remove(found.get());
+        if(wiseSayings.removeIf(w -> w.getId() == deleteId))
             System.out.println("%d번 명언이 삭제되었습니다.".formatted(deleteId));
-        }
+        else
+            System.out.println("%d번 명언은 존재하지 않습니다.".formatted(deleteId));
     }
 
     private void showWiseSayingList(){
