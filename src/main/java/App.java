@@ -1,12 +1,14 @@
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
 public class App {
-    Scanner scanner = new Scanner(System.in);
-    WiseSaying[] wiseSayings = new WiseSaying[100];
-    private int wiseSayingLastIndex = 0;
+    private Scanner scanner = new Scanner(System.in);
+    private List<WiseSaying> wiseSayings = new ArrayList<>();
+    private int lastId;
 
-    void run(){
+    public void run(){
         System.out.println("== 명언 앱 ==");
 
         while(true){
@@ -38,83 +40,68 @@ public class App {
         scanner.close();
     }
 
-    void modifyWiseSayingById(int modifyId) {
-        if(!isWiseSayingExistById(modifyId)){
+    private void modifyWiseSayingById(int modifyId) {
+
+        Optional<WiseSaying> found = wiseSayings.stream()
+                .filter(w -> w.getId() == modifyId)
+                .findFirst();
+        if(!found.isPresent())
             System.out.println("%d번 명언은 존재하지 않습니다.".formatted(modifyId));
-        }
 
-        else{
-            modifyContentAndAuthor(modifyId);
-        }
+        else
+            modifyContentAndAuthor(found.get());
     }
 
-    void modifyContentAndAuthor(int modifyId) {
-        System.out.println("명언(기존) %s".formatted(wiseSayings[modifyId - 1].getContent()));
+    private void modifyContentAndAuthor(WiseSaying modifyWiseSaying) {
+
+        System.out.println("명언(기존) %s".formatted(modifyWiseSaying.getContent()));
         System.out.print("명언 : ");
-        wiseSayings[modifyId - 1].setContent(scanner.nextLine().trim());
+        modifyWiseSaying.setContent(scanner.nextLine().trim());
 
-        System.out.println("작가(기존) : %s".formatted(wiseSayings[modifyId - 1].getAuthor()));
+        System.out.println("작가(기존) : %s".formatted(modifyWiseSaying.getAuthor()));
         System.out.print("작가 : ");
-        wiseSayings[modifyId - 1].setAuthor(scanner.nextLine().trim());
+        modifyWiseSaying.setAuthor(scanner.nextLine().trim());
     }
 
-    boolean isWiseSayingExistById(int deleteId) {
-        boolean isWiseSayingExist = true;
-        if(deleteId-1 >= wiseSayingLastIndex || wiseSayings[deleteId - 1].getId() == 0)
-            isWiseSayingExist = false;
-
-        return isWiseSayingExist;
-
+    private boolean isWiseSayingExistById(int checkId) {
+        return wiseSayings
+                .stream()
+                .anyMatch(w->w.getId() == checkId);
     }
 
-    void deleteWiseSayingById(int deleteId) {
-        if(!isWiseSayingExistById(deleteId)){
+    private void deleteWiseSayingById(int deleteId) {
+        Optional<WiseSaying> found = wiseSayings.stream()
+                .filter(w -> w.getId() == deleteId)
+                .findFirst();
+        if(!found.isPresent())
             System.out.println("%d번 명언은 존재하지 않습니다.".formatted(deleteId));
-        }
+
         else{
-            wiseSayings[deleteId - 1].setId(0);
-            wiseSayings[deleteId - 1].setAuthor(null);
-            wiseSayings[deleteId - 1].setContent(null);
+            wiseSayings.remove(found.get());
             System.out.println("%d번 명언이 삭제되었습니다.".formatted(deleteId));
         }
     }
 
-    void showWiseSayingList(){
-        WiseSaying[] sortedWiseSayings = getWiseSayingList();
+    private void showWiseSayingList(){
+        List<WiseSaying> sortedWiseSayings = wiseSayings.reversed();
 
         System.out.println("번호 / 작가 / 명언");
         System.out.println("-------------------");
-        for(int i=0; i < sortedWiseSayings.length; i++){
-            if(sortedWiseSayings[i].getId() == 0)
-                continue;
-            System.out.println("%d / %s / %s".formatted(sortedWiseSayings[i].getId(), sortedWiseSayings[i].getAuthor(), sortedWiseSayings[i].getContent()));
-        }
+        for(WiseSaying w : sortedWiseSayings)
+            System.out.println("%d / %s / %s".formatted(w.getId(), w.getAuthor(), w.getContent()));
     }
 
-    WiseSaying[] getWiseSayingList(){
-
-        WiseSaying[] sortedWiseSayings = new WiseSaying[wiseSayingLastIndex];
-        int index = 0;
-        for(int i = wiseSayingLastIndex-1 ; i >= 0; i--){
-            sortedWiseSayings[index++] = wiseSayings[i];
-        }
-
-        return sortedWiseSayings;
-    }
-
-    void addWiseSaying(){
+    private void addWiseSaying(){
         System.out.print("명언 : ");
         String content = scanner.nextLine().trim();
 
         System.out.print("작가 : ");
         String author = scanner.nextLine().trim();
 
-        int id = wiseSayingLastIndex + 1;
+        int id = ++lastId;
 
-        wiseSayings[wiseSayingLastIndex] = new WiseSaying(id,content,author);
+        wiseSayings.add(new WiseSaying(id,content,author));
 
-        wiseSayingLastIndex++;
-
-        System.out.println("%d번 명언이 등록되었습니다.".formatted(wiseSayingLastIndex));
+        System.out.println("%d번 명언이 등록되었습니다.".formatted(id));
     }
 }
