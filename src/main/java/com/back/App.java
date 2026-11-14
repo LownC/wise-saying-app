@@ -6,9 +6,17 @@ import com.back.domain.wiseSaying.controller.WiseSayingController;
 import java.util.Scanner;
 
 public class App {
-    private final Scanner scanner = AppContext.scanner;
-    private final SystemController systemController = AppContext.systemController;
-    private final WiseSayingController wiseSayingController = AppContext.wiseSayingController;
+    private final Scanner scanner;
+    private final SystemController systemController;
+    private final WiseSayingController wiseSayingController;
+
+    public App(Scanner scanner) {
+        AppContext context = new AppContext(scanner);
+
+        this.scanner = context.scanner;
+        this.systemController = context.systemController;
+        this.wiseSayingController = context.wiseSayingController;
+    }
 
     public void run() {
         System.out.println("== 명언 앱 ==");
