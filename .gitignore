@@ -43,3 +43,4 @@ bin/
 .DS_Store
 ### 명언 앱 파일 저장소 ###
 db/
+db.properties
