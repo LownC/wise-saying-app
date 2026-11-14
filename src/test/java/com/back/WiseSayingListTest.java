@@ -1,5 +1,6 @@
 package com.back;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
@@ -7,6 +8,11 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 // 검색·페이징 통합 테스트: 샘플 명언 10개("명언 1"~"명언 10")를 만든 앱으로 실행한다
 class WiseSayingListTest {
+    @BeforeEach
+    void beforeEach() {
+        AppTestRunner.resetTestDb();
+    }
+
     private static String runWithSampleData(String input) {
         return AppTestRunner.run(input, scanner -> new App(scanner, true).run());
     }

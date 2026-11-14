@@ -37,6 +37,10 @@ public class WiseSayingService {
         return wiseSayingRepository.findForList(keywordType, keyword, Math.max(1, pageNo), PAGE_SIZE);
     }
 
+    public void build() {
+        wiseSayingRepository.build();
+    }
+
     public Optional<WiseSaying> findById(int id) {
         return wiseSayingRepository.findById(id);
     }

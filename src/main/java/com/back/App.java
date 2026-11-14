@@ -44,6 +44,7 @@ public class App {
                 case "목록" -> wiseSayingController.actionList(rq);
                 case "삭제" -> wiseSayingController.actionDelete(rq);
                 case "수정" -> wiseSayingController.actionModify(rq);
+                case "빌드" -> wiseSayingController.actionBuild();
                 default -> System.out.println("알 수 없는 명령입니다.");
             }
         }

@@ -1,12 +1,18 @@
 package com.back;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-// 각 테스트는 AppTestRunner 가 새 App(= 새 저장소, 번호 0부터)을 만들어 실행하므로 실행 순서와 무관하다.
+// 각 테스트 전에 테스트 전용 저장 폴더를 비우므로(번호 0부터) 실행 순서와 무관하다.
 class WiseSayingControllerTest {
+    @BeforeEach
+    void beforeEach() {
+        AppTestRunner.resetTestDb();
+    }
+
     @Test
     @DisplayName("종료")
     void t1() {
@@ -159,15 +165,8 @@ class WiseSayingControllerTest {
     }
 
     @Test
-    @DisplayName("저장소 초기화 : 새로 시작한 앱은 앞 테스트의 명언을 갖고 있지 않다")
+    @DisplayName("저장소 초기화 : 테스트 전에 저장 폴더를 비우므로 번호가 1부터 시작한다")
     void t10() {
-        AppTestRunner.run("""
-                등록
-                현재를 사랑하라.
-                작자미상
-                종료
-                """);
-
         String out = AppTestRunner.run("""
                 등록
                 과거에 집착하지 마라.

@@ -62,6 +62,11 @@ public class WiseSayingController {
                 .collect(Collectors.joining(" / "));
     }
 
+    public void actionBuild() {
+        wiseSayingService.build();
+        System.out.println("data.json 파일의 내용이 갱신되었습니다.");
+    }
+
     public void actionDelete(Rq rq) {
         int id = rq.getParamAsInt("id", -1);
 

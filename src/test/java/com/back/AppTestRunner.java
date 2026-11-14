@@ -21,4 +21,10 @@ public final class AppTestRunner {
     public static String run(String input) {
         return run(input, scanner -> new App(scanner).run());
     }
+
+    // 실제 db/ 대신 테스트 전용 폴더(db/test/wiseSaying)를 쓰도록 바꾸고 비운다. 각 테스트 전에 호출한다.
+    public static void resetTestDb() {
+        AppConfig.setTestMode();
+        TestUtil.deleteDir(AppConfig.getWiseSayingDbDir());
+    }
 }
